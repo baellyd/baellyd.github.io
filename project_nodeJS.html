@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <title>CS290 API How-To</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<script src="script.js"></script>
+  </head>
+  
+	<body>
+		<div id="titleDiv">
+			<div id= "tb1" class="titleButton"><a href = "project_main.html">Intro</a></div>
+			<div id= "tb2" class="titleButton"><a href = "project_key.html">Getting Access</a></div>
+			<div id= "tb3" class="titleButton"><a href = "project_req.html">Making Requests</a></div>
+			<div id= "tb4" class="titleButton"><a href = "project_resp.html">API Response</a></div>
+			<div id= "tb5" class="titleButton"><a href = "project_ex.html">API At Work</a></div>
+		</div>
+		<img class= "npmImg" src= "npm0.JPG">
+		<div id= "introBox3"><h2>npm and the Yelp API</h2>
+			<p>After installing Node.js and npm,
+			you'll need to download these modules to support Yelp API functionality:
+			</p>
+
+			<dl>
+				<dt><strong>-bash-4.2$ npm install --save request</strong>
+					<dd>The <a href = "https://www.npmjs.com/package/request">request</a> module is used to make http
+					calls using get or post.  You can also do this using forms on the browser, but	it's 
+					facilitated here. <br/>
+				<dt><strong>-bash-4.2$ npm install --save nonce</strong>
+					<dd>The nonce module provides a timestamp, ever increasing and unique for each request made <br/>
+				<dt><strong>-bash-4.2$ npm install --save oauth-signature</strong>
+					<dd>Provides authentication capabilities when accessing third-party servers.  For OAuth 1.0a (which
+					we will be using with Yelp v2), the Consumer "secret" (password) is hashed with a Token "secret" 
+					and a variety of submitted parameter values as described under the Request link.  This process allows
+					the users to not share username and password credentials directly, maintaining them as secure.(5)
+				<dt><strong>-bash-4.2$ npm install --save yelp</strong>
+					<dd>Allows you to save your secure Yelp information (Consumer Key, Consumer Secret, Token ID and 
+					Token Secret) for use during queries. 
+			</dl>
+			
+			<img class= "embedImg" src= "yelp.JPG">
+			<h2>Using the Modules</h2>
+			<p>You're now ready to add the modules to your javascript code!  Include a reference to each module at the
+			top of your .js file, or in your 'script' section, if embedding in an HTML file.  You can also load the requests
+			into variables to access their attributes:  
+			<img class= "embedImg" src= "code_js.JPG">
+			</p>
+		</div>
+		<img class= "npmImg" src= "npm1.JPG">
+					<h3>...Now that we've got the right modules, we're ready to start our request!</h3>
+
+	</body>
+	<footer>
+		<p>References: <br/>
+		1. <a href = "http://eloquentjavascript.net/20_node.html">http://eloquentjavascript.net/20_node.html</a><br/>
+		2. <a href = "https://en.wikipedia.org/wiki/Asynchronous_I/O">https://en.wikipedia.org/wiki/Asynchronous_I/O</a><br/>
+		3. <a href = "https://en.wikipedia.org/wiki/Npm_(software)#cite_note-ampersandjs-5">https://en.wikipedia.org/wiki/Npm_(software)#cite_note-ampersandjs-5</a><br/>
+		4. <a href = "https://arian.io/how-to-use-yelps-api-with-node/">https://arian.io/how-to-use-yelps-api-with-node/</a><br/>
+		5. <a href = "https://tools.ietf.org/html/rfc5849">https://tools.ietf.org/html/rfc5849</a>
+		</p>
+	</footer>
+</html>

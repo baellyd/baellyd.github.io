@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <title>CS290 API How-To</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  
+	<body>
+		<div id="titleDiv">
+			<div class="titleButton"><a href = "index.html">Intro</a></div>
+			<div class="titleButton"><a href = "project_key.html">Getting Access</a></div>
+			<div class="titleButton"><a href = "project_req.html">Requests</a></div>
+			<div class="titleButton"><a href = "project_resp.html">Response</a></div>
+			<div class="titleButton"><a href = "project_ex.html">API At Work</a></div>
+		</div>
+
+		<h2>Making Sense of Returned Data</h2>
+		<div id = "unfiltered">
+			<h3>Raw API Data</h3>
+			<p>Using the search parameters "busType: 'ice cream', location: 'Oakland CA' ", the unfiltered content returned from the API and output to the console looks like this: 
+			</p>		
+			<img class = "embedImg" src = "jsReturn.JPG">
+		</div>
+		<div id = "unfiltered2">
+			<p>Although the raw data is helpful in demonstrating all business attributes available to you, you need to first convert it into a useable form for access to individual elements. Recall from the previous section that the callback data type requested was JSONP.  To get to each business and its attributes within the returned object (and to make pretty formatting), the object is stringified into a JSON string and then parsed into individual JSON objects.  Each object represents a single business. 		 
+			</p>
+			<img class = "embedImg2" src = "jsnStr.JPG">
+			<p>Business attributes can then be displayed on a web page or logged at the console.  Below, a "for"loop is used to move through the business objects and print out the desired attributes.  Here, we've chosen to display the thumbnail picture of the business and Yelp link, the rating, name, phone number and address. You can see the working version of the code on the next page.
+			</p>
+			<img class = "embedImg2" src = "jqObj.JPG">
+		</div>
+		
+		<div id= "console">
+			<p class= "centered">  Here are the final results from the command line query, neatly parsed and displayed to output: </p>
+			<img class = "embedImg4" src = "consoleOut.JPG">
+		</div>
+		
+		<div class= "next">
+			<a href = "project_ex.html"><h1>And now that we've seen the inner-workings...We Can Give It a Run!</h1></a>
+		</div>
+	</body>
+</html>

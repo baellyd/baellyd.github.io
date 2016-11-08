@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <title>CS290 API How-To</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  
+  <body>
+		<div id="titleDiv">
+			<div class="titleButton"><a href = "index.html">Intro</a></div>
+			<div class="titleButton"><a href = "project_key.html">Getting Access</a></div>
+			<div class="titleButton"><a href = "project_req.html">Requests</a></div>
+			<div class="titleButton"><a href = "project_resp.html">Response</a></div>
+			<div class="titleButton"><a href = "project_ex.html">API At Work</a></div>
+		</div>
+	
+	<div><h2>API Authentication: How To Get It</h2>
+	</div>
+	<div id= "request">
+		<p>In order to use the API, you'll need some authentication credentials.  You can get these by creating an "App" on Yelp, using the App Console <a href = "https://www.yelp.com/developers/v2/manage_api_keys">here</a>.  Enter your website URL, description of how the API will be used, and Industry (ex: "Other", Education") in the fields. 
+		</p>
+		<img class= "createImg" src= "reason.jpg">
+	</div>		
+			
+	<div>		
+		<p class= "centered">Yelp returns to you the following information:</p>
+
+		<table>
+			<thead>
+				<th>What it's called</th>
+				<th>What it does</th>
+			</thead>
+			<tr>
+				<td>Consumer ID
+				<td>User-specific ID (user name) which identifies you to Yelp
+			<tr>	
+				<td>Consumer Secret
+				<td>User-specific password; confirms you are who you say you are to Yelp. Used with the Token Secret to generate a hashed Signature	for secure authentication.
+			<tr>
+				<td>Access Token ID
+				<td>Value used during request authentication to gain access to the Yelp API <a href= "https://en.wikipedia.org/wiki/Web_API#Endpoints">endpoints.</a>
+			<tr>
+				<td>Token Secret
+				<td>Password associated with the Access Token; confirms the token is being used by the intended party.  Used along with Consumer Secret by OAuth v1 to generate a hashed Signature for secure authentication (see the next page). 			
+		</table>
+	</div>	
+	
+	<p  class= "centered">This is how Yelp will identify you when you make a request.<em>Do not give this information out!</em> Since they should remain secret, the actual strings are blocked out in the image below.
+	</p>
+	
+	<img class= "createImg" src= "info.jpg">
+	<div class= "next">
+		<a href= "project_req.html"><h1>OK...That was the easy part.  Now that you have the right credentials....Let's make a request!</h1></a>
+	</div>
+	</body>
+</html>
+

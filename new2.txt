@@ -1,0 +1,156 @@
+		<p>To access the API, it's necessary to go through the following series of steps, as described in detail
+			at the links above: 
+		</p>
+		<ol>
+			<li>Install the necessary Node.js packages using npm 
+			<li>Get authentication credentials: Request an API Key, Secret, and Token from Yelp by creating an "App". 
+				There are 2 versions of the API, v2 and v3, which vary slightly in how credentials are obtained.
+			<li>Make an API Request: Use Key, Secret, Token and Token Secret to authenticate API calls when requesting 
+				information from Yelp
+			<li>API Response: Parse and process the returned data
+		</ol>
+
+			<div id= "input">
+		<h3> The Necessary Input</h3>
+		<p>Node.js can be used to create the javascript code for making a GET request, 
+		which contains the search parameters and security information.
+		</p>
+		<p>You will need the following information:
+		</p>
+		<ul>
+			<li>The Yelp npm library; this allows you to create a Yelp object which stores your
+				credentials, provides OAuth hashing/signature generation/authentication, and
+				includes search methods for use during API calls.  Download this on the command line: <br/><br/>
+				<img class= "embedImg2" src= "yelp.JPG"><br/><br/>
+				
+			<li>Your Consumer Key, Consumer Secret, Token and Token Secret generated 
+				in the previous step will next be used when making a call to the API via GET request.
+			<li>The search URL, <strong>"https://api.yelp.com/v2/search"</strong>, to which query parameters will be appended.
+			<li>Query results, which you can obtain from a user form embedded in HTML.
+		</ul>
+	</div>
+
+	<br/><br/><br/>
+	
+		<td>Using Express
+			<td class= "col2"><img class = "embedImg" src = "express.JPG">
+		<tr>
+		
+				
+			<tr>
+				<td>
+				<td class= "col2"><img class = "embedImg" src = "search.JPG">
+				<br/>Add the search parameters via the object "search" method.  One way to do this is to retrieve the 
+				input provided by the user via form, use it to create a JSON object, and add it as an input parameter 
+				to the yelpAPI function. <br/><br/>In this example, city, state and zip were added together to form one string 
+				to include as a "location" property.  The yelpAPI function then	validates credentials and performs the API search. 
+				<td>
+			<tr>
+				<td>Making a promise
+				<td class= "col2"><img class = "embedImg" src = "promise.JPG"> 
+				<br/>As described above, a "promise" placeholder (named "data") is made to contain the returned information from
+				the Yelp Fusion API.<br/>
+				<br/>The data is then parsed into a JSON object (named "jsonObJ").  Each business is included as an object within 
+				jsonObJ, with its characteristics included as properties.  Here, you see two properties- name and phone- 
+				being output to the console.<br/>
+				<br/>In the event that an error is returned in lieu of data, leaving the promise in a "rejected" state, the error
+				is "caught" and output to the console.
+				<td>
+		
+		
+		<ul>
+								<li>The oauth_signature_method: <a href = "https://msdn.microsoft.com/en-us/library/system.security.cryptography.hmacsha1(v=vs.110).aspx">HMAC-SHA1</a>.  HMAC is "Hash Message Authentication Code"; SHA1 is "Secure Hash Algorithm 1". HMAC-SHA1 therefore describes the type of hash algorithm which produces a 160-bit (20-byte) hash value used to encrypt and authenticate the API request (1). 
+								<li>The HTTP method (GET) that will be used for the request.
+								<li>The URL that will receive the request: https://api.yelp.com/v2/search
+								<li>The search parameters: term, location.
+								<li>The oauth_nonce, as described in the image above
+								<li>The oauth_timestamp, as described in the image above.
+								<li>The oauth_version: 1.0
+								<p>
+							</ul>
+							
+							
+							: "parameters" defines the search information, consumer key and token IDs, the signature method and call back type; "request" combines this information with the url and method used to perform the request, and "secrets" includes consumer- and token-specific password information
+							
+							
+	<div id= "promise">
+		<h2>Promises, Promises</h2>
+		<img class = "embedImg3" src= "promises.png">
+
+		<p>When making an asynchronous request, a placeholder object, a <a href = "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">
+			promise</a>, is generated in anticipation of a response. A promise can have 3 states, which indicate 
+			the current status of the asynchronous operation: </p>
+			<ul>
+				<li><strong>Pending:</strong>Initial state, acting as a placeholder prior to completion of an operation.
+				<li><strong>Fulfilled:</strong>Final state, in which the operation was successful.  In this example, .then
+				responds by executing.
+				<li><strong>Rejected:</strong>Final state, in which the operation failed.
+			</ul>
+		<p>Promises use callback functions (in this example, .then and .catch) to perform different
+			actions depending on which final state is achieved- either the request achieves the intended
+			response and returns the requested data, or fails yielding an error.  			
+			<p>Image source: <a href= "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">
+			https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</a>
+			</p>
+		</p>
+	</div>
+	
+					
+				<li id= "fn1" ><a class = "foot" href= "https://en.wikipedia.org/wiki/Application_programming_interface#cite_note-Clarke4-1">
+				https://en.wikipedia.org/wiki/Application_programming_interface#cite_note-Clarke4-1</a><br/>
+				<li id= "fn2" ><a class = "foot" href= "http://www.programmableweb.com/news/how-web-and-browser-apis-fuel-api-economy/analysis/2015/12/03">
+				http://www.programmableweb.com/news/how-web-and-browser-apis-fuel-api-economy/analysis/2015/12/03</a><br/>
+
+
+
+				<li id= "fn6" ><a class = "foot" href= "https://en.wikipedia.org/wiki/Npm_(software)">
+				https://en.wikipedia.org/wiki/Npm_(software)</a><br/>
+				<li id= "fn7" ><a class = "foot" href= "https://en.wikipedia.org/wiki/JQuery">
+				https://en.wikipedia.org/wiki/JQuery</a><br/>
+				<li id= "fn8" ><a class = "foot" href= "https://en.wikipedia.org/wiki/Ajax_(programming)">
+				https://en.wikipedia.org/wiki/Ajax_(programming)</a><br/>
+				<li id= "fn8" ><a class = "foot" href= "http://www.seguetech.com/ajax-technology/">
+				http://www.seguetech.com/ajax-technology/</a><br/>
+				<li id= "fn8" ><a class = "foot" href= "http://jqfundamentals.com/chapter/ajax-deferreds">
+				http://jqfundamentals.com/chapter/ajax-deferreds</a><br/>
+				
+
+				GET&https%3A%2F%2Fapi.yelp.com%2Fv2%2Fsearch&callback%3Dcb%26location%3D%26oauth_consumer_key%3D830ldbmoEOO933pTxaoO0A%26oauth_nonce%3D8yaDSq%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1477808527146%26oauth_token%3DpXFLdNfi28Tfq41zeHP4GlvJiCp42zOW%26oauth_version%3D1.0%26term%3Dscript_js.js:57:3
+
+				
+				GET\u0026https%3A%2F%2Fapi.yelp.com%2Fv2%2Fsearch\u0026callback%3Dcb%26location%3D%26oauth_consumer_key%3D830ldbmoEOO933pTxaoO0A%26oauth_nonce%3D8yaDSq%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1477808527146%26oauth_token%3DpXFLdNfi28Tfq41zeHP4GlvJiCp42zOW%26oauth_version%3D1.0%26term%3D"
+				<img class = "embedImg" src = "oauth.JPG">
+						
+
+		
+		//Set parameter values
+//		OAuth.setParameter(request, "oauth_consumer_key", "830ldbmoEOO933pTxaoO0A");
+//		OAuth.setParameter(request, "oauth_token", "pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW");
+//		OAuth.setParameter(request, "oauth_signature_method", 'HMAC-SHA1');
+//		OAuth.setParameter(request, "oauth_timestamp", time);
+		
+//		OAuth.setParameter(request, "oauth_nonce", nonce);
+//		OAuth.setParameter(request, "oauth_version", "1.0");
+ //       OAuth.setParameter(request, "oauth_signature", signature);
+ //		var oauth = parameters;
+ 
+ 
+
+		//OAuth.setTimestampAndNonce(request);
+		//console.log(baseStr);				
+		//OAuth.SignatureMethod.sign(request, secrets);	
+		
+			<div class = "filtered">
+		<p>The parsed, filtered JSON content described in the code above looks like this: </p>
+		<img src = "filtJS.JPG">	
+	</div>
+	
+	
+
+.embedImg2 {
+	width: 95%;
+	display: inline-block;
+	margin: 1%;
+	margin-left: 2%;
+    margin-right: 1%;
+}

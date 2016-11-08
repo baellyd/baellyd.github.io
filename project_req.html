@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <title>CS290 API How-To</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	</head>
+  
+	<body>
+		<div id="titleDiv">
+			<div class="titleButton"><a href = "index.html">Intro</a></div>
+			<div class="titleButton"><a href = "project_key.html">Getting Access</a></div>
+			<div class="titleButton"><a href = "project_req.html">Requests</a></div>
+			<div class="titleButton"><a href = "project_resp.html">Response</a></div>
+			<div class="titleButton"><a href = "project_ex.html">API At Work</a></div>
+		</div>
+
+	<h2 id= "make_calls">How to make calls/requests to an API</h2>
+
+	<p>Now we can put together all of these pieces to generate the code for the API call.  Let's walk through it 
+	piece-by-piece, comparing implementations in Node.js and Javascript/jQuery/Ajax:</p>
+	
+		<table>
+			<thead>
+				<th>Description
+				<th>Node.js
+				<th>Javascript and Jquery
+			</thead>
+			<tbody>
+				<tr>
+					<td class= "col1"><p class= "centered">Gather your authorization credentials</p>
+					<td  colspan = 2>
+						<p>Yelp requires that you submit the following information to authenticate the API call: </p>
+						<img class = "embedImg" src = "yelpReq.JPG">
+						<ul>
+							<li>The oauth_consumer_key and oauth_token were provided for you on the previous page.						
+							<li>The oauth_signature_method: <a href = "https://msdn.microsoft.com/en-us/library/system.security.cryptography.hmacsha1(v=vs.110).aspx">HMAC-SHA1</a>.  HMAC is "Hash Message Authentication Code"; SHA1 is "Secure Hash Algorithm 1". HMAC-SHA1 therefore describes the type of hash algorithm which produces a value used to encrypt and authenticate the API request. 	
+							<li>the oauth_timestamp, oauth_nonce and secure oauth_signature are generated as described below.						
+						</ul>
+				<tr>
+				<td class= "col1"><p class= "centered">Get user input</p>
+				<td class= "col2"><img class = "embedImg" src = "setArgs.JPG">
+						<p>User search parameters can be entered on the command line during the .js function call.
+						</p>
+						
+						<p>As demonstrated in Lines 1-3, a minimum of three arguments are obtained. The arguments are strings indicating business type (argument 2) and location (all other arguments from 3 onward).
+						</p>
+						<p>The "for" loop on Lines 10-12 combines arguments argv[3] to argv[length - 1] to represent location (city, state and zip).
+						</p>
+					<td class= "col2"><img class = "embedImg" src = "form.JPG">
+						<img class = "embedImg" src = "getInfo.JPG">
+						<p>Search information can be obtained from a web form.  Above you see the code used to generate the working example under the "API At Work" tab.</p>
+						
+						<p>In this example, jQuery was used to load Javascript content upon completion of web page loading.  When the submit button is clicked, the "onclick" event handler fires and executes an anonymous function to obtain and save the form entry values.  City, state and zip information are joined into a single "location" string.
+						</p>
+				<tr>
+					<td class= "col1"><p class= "centered">Using NPM Libraries</p>
+					<td class= "col2"> <img class = "embedImg"  src = "require.JPG">			
+						<p>"Require" is a built-in Node.js function.  Here, it is being used to load a Yelp npm module.  This module returns a "Yelp" object type which can be used to instantiate new "Yelp" objects, which contain secure credential and search parameter string attributes.
+						</p>					
+					<td><img id= "leftImg" class = "embedImg" src = "question.gif">
+						<p>NPM modules are used by Node.js, and some (like the Yelp module) cannot be directly implemented in a browser.  We will need to find another way of "packaging" secure credential and search parameter information for making the API call.
+						</p>					
+				<tr>
+					<td class= "col1"  rowspan = 5><p class= "centered">Creating a Request Object</p>
+					<td class= "col2" rowspan = 5><img class = "embedImg" src = "yelpObj.JPG">
+						<p>The NPM Yelp module simplifies the request process in many ways.  Just create a Yelp object and load it with your credentials; the rest is done for you:</p>
+						<ul>
+							<li>It pre-populates the URL to which the request will be sent, 'https://api.yelp.com/v2/search'.
+							<li>It defines the send method (GET) to be used for the request.
+							<li>It generates the timestamp, nonce, and hashed OAuth signature for authentication when you make calls to the API, and includes it with search parameters in the sent object.  No need to create a nonce or time stamp yourself, or hash parameters and package the result.  
+							<li>It specifies the type of object (JSONP) which will be returned by the Yelp API.
+						</ul>
+						<p>Contrast this with the multiple individual steps needed for Javascript/jQuery and Ajax....
+						</p>
+					<td class= "col3">
+					<p class= "centered">Gathering Request Contents</strong><img class = "embedImg" src = "jqParams.JPG">
+					<p>The jQuery request has to be manually populated with all of the values seen above, in contrast with Yelp npm module and Node.js.
+					</p>
+					<p>Here you can see that information has been logically grouped into individual objects containing different elements of the request- information to be included (parameters), submission type/address (request), and secret information (secrets).  Note that the 'oauth_signature' under parameters is blank; this information will be added later after the secrets are used to generate it.  Oauth_nonce and oauth_timestamp are generated as described below.  
+					</p>
+					<p><strong>Note:</strong>The nonce and timestamp code are actually placed before the parameters/request/secrets objects in the code for the working program, so that nonce and time could be included in the object during its creation.  They were provided out-of-sequence here for better tutorial flow.  (You can also populate them later if preferred, in the manner shown for the oauth_signature.)
+					</p>
+				<tr>
+					<td class= "col3">
+						<p class= "centered">Nonce Generation</p>
+						<img class = "embedImg" src = "nonce.JPG">
+						<p>As shown, the character set used to produce the nonce is a string (nonceChars) comprised of lower and upper case letters and single digits.  A position in the character set is chosen by randomly generated a number within the total set length using the Math.random and Math.floor functions; the value at that set position is then appended to the nonce being created until the nonce reaches a length of 6 characters.
+						</p>
+				<tr>		
+						<td class= "col3">
+						<p class= "centered">Timestamp Generation</p>
+						<p>The timestamp represents the actual time passed in seconds since the Unix Epoch, January 1, 1970, 00:00:00 UTC.  Like the nonce, the timestamp is different for each request sent and therefore marks a given request as unique.
+						</p>
+						<img class = "embedImg" src = "time.JPG" style="width: 50%">
+						<p>A new date object is created and its getTime method is invoked to generate the current time.
+						</p>
+						<p>You may also use, as an alternative for manually generating the timestamp and nonce, the function Oauth.setTimestampandNonce(request) <a href= "http://apps.jgate.de/platform/source?lib-oauth">here</a>. As demonstrated by the code above, the information in the request object is not really required to perform the operation, although included as a parameter in the setTimestampandNonce function call.
+						</p>
+				<tr> 
+					<td class= "col3">
+						<p class= "centered">Creating a Base String and Percent Encoding</p>
+						<p>Values to be hashed to create the Oauth signature include the request type (request.method), url (request.action), and all parameters shown in the previous screen shot.  The OAuth 1.0 standard specifies that they must first be <a href = "https://en.wikipedia.org/wiki/Percent-encoding">percent encoded</a>, by removing all !*'() symbols and respectively replacing them with percent encoded characters %21, %2A, %27, %28 and %29.  
+						</p>
+						<img class = "embedImg" src = "pctEncode.JPG">
+						<p>In this example, Oauth method support functions "percentEncode" and "normalizeParameters(parameters)" found <a href= "http://apps.jgate.de/platform/source?lib-oauth">here</a> were used to search (via regular expressions), strip out and replace all of the characters:
+						</p>
+						<img class = "embedImg" src = "regex.JPG">
+						<p>Once encoded, the values are concatenated with "&" to create the baseString as an input parameter to the base64 hashing function.
+						</p>
+						<p>	Note that percent encoding and string concatenation must also be performed on the secrets to create the key.  
+						</p>
+				<tr> 
+					<td class= "col3">
+						<p class= "centered">Creating the Signature</p>
+						<img class = "embedImg" src = "sign.JPG">
+						<p>Once the base string and key are ready, you can perform the b64_hmac_sha1(key, baseStr) function found <a href = "https://cdn.rawgit.com/rmxdave/phnx/master/lib/OAuth/SHA1.js">here</a>.  The function returns the encoded string, which may be assigned to oauth_signature in the parameters object.  </p>
+						<p>This completes the request content, and you're ready to talk to Yelp!!
+						</p>
+				<tr>		
+					<td class= "col1" rowspan= 3><p class= "centered">Sending the Request to the Yelp API</p>
+					<td class= "col2" colspan= 2>
+						<p>For both Node.js and Javascript/jQuery/Ajax, requests will be sent asynchronously.  This requires us to create callbacks or <a href= "https://developers.google.com/web/fundamentals/getting-started/primers/promises#whats-all-the-fuss-about">promises</a> which manage the returned information that was requested, or an error code in the event of failure. Examples of promises (in Node.js) and callbacks (in Jquery) are provided below.
+				<tr>
+					<td class= "col2">
+					<p class= "centered">The Yelp Object
+						</p>
+						<p>All required parameters are neatly (and abstractly) bundled into the Yelp object, with the exception of the query parameters (business type and location). 
+						</p>
+						<img class = "embedImg" src = "yelpNodeObj.JPG">
+						<p>The object's "search" method accepts as parameters key/value pairs of term/description and location/description- here, the "busType" and "location" strings created from command line input. 
+						</p>
+						<p>
+						Calling the search method serves to send the information to Yelp.
+						</p>
+					<td class= "col3" rowspan = 2>
+						<p class= "centered"><strong>jQuery and the Ajax Request</strong>
+						<img class = "embedImg" src = "jqSrch.JPG">
+						<p>	The ajax request must include:
+						</p>
+						<ul>
+							<li>The url for submission
+							<li>All parameters as data
+							<li>data type: Data format being returned from the server.  The data type returned is <a href= "https://en.wikipedia.org/wiki/JSONP">JSONP</a>, or "JSON with Padding".  The JSON object can't be sent from one server to another directly, due to a browser's <a href = "https://en.wikipedia.org/wiki/Same-origin_policy">Same-Origin policy</a>, designed to prevent malicious scripts from accessing your page data. The "padding" is a <a href= "https://www.sitepoint.com/jsonp-examples/">function call</a> wrapped around the returned JSON object; the function is not impacted by the same-origin policy and can be interpreted by the browser.
+							<li>cache: True or false, depending on whether pages should be cached by the browser.
+							<li>error:  This callback handler takes the place of the .catch handler described under the Node.js code.  A function can be included to respond to errors returned by the server.
+							<li>success:  This callback handler takes the place of the .then handler described under the Node.js code.  A placeholder ("data") is again provided for the returned JSON object.
+						</p>
+				<tr>
+					<td class= "col2">	
+						<p class= "centered">Response and Error Handling
+						</p>
+						<img class = "embedImg" src = "nodeSrch.JPG">
+						<p>Response is managed through a <a href= "http://odetocode.com/blogs/scott/archive/2015/10/01/javascript-promises-and-error-handling.aspx">Promise</a>. ".then" and ".catch" handler functions are chained together at the end of the search function, and provide a place holder for the information ("data" in the example) returned upon callback.  Results "fall through" each handler, with execution of only those that apply.  
+						</p>
+						<p>For example, a valid result returned from the API using the code displayed above will execute the ".then" handler, but take no action with the ".catch" handler.  A returned error would fall through, with .catch "catching" it and causing the error type to print to the console. 
+						</p>
+						<p>The error below was generated as a demonstration.  Changing the consumer key by 1 character yields an invalid OAuth signature which is rejected by the API.
+						</p>
+						<img class = "embedImg" src = "inval.JPG">
+						<p>The returned error caused the ".catch" block handler to output the error type to the console.
+						</p>
+				<tr>
+				<td class= "col1" rowspan= 3><p class= "centered">Processing the Results</p>
+				<td class= "col2" colspan= 2>
+				<p>Let's now examine how valid data is returned from the API via callback/promise, and parsed after receipt.  
+				</p>
+			</tbody>
+		</table>
+
+		<div class= "next">
+			<a href = "project_resp.html"><h1>Making Sense of Data...</h1></a>
+		</div>
+	</body>
+</html>

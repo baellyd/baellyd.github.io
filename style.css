@@ -1,0 +1,307 @@
+a {
+	color: #2980b9;
+}
+
+a:visited{
+    color: #2980b9;
+}
+
+a:hover{
+	color: yellow;
+}
+
+a.foot:hover, a.links:hover{
+	color: red;
+}
+
+h1, h2, h3{
+	color:  midnightblue;
+}
+
+h1{
+	color: red;
+	display: inline-block;
+	margin: 2%;
+}
+
+h2, h3{
+	text-align: center;
+	width: 100%;
+}
+
+p{
+	margin: 2%;
+}
+
+p.centered{
+	text-align: center;
+	font-weight: bold;
+}
+
+table{
+		margin: 2%;
+		width: 94%;
+	}
+	
+table, th, td{
+	background-color: lightsteelblue;
+	border-collapse: collapse;
+	border-color: midnightblue;
+	border-style: solid; 
+	border-width: 1px;
+	margin-left: 5%;
+	margin-right: 5%;
+	padding: 10px;
+	text-align: left;
+	vertical-align: top;
+}
+
+th{
+	text-align: center;
+}
+
+ul>li{
+	margin: 2%;
+}
+
+#titleDiv{
+	background-color: #dee0e8;
+	border-collapse: separate;	
+	border-color: black;
+	border-spacing: 2px;
+	border-style: ridge;	
+	display: table;
+	height: 50px;
+	text-align:center;
+	width: 100%;
+}
+
+.titleButton{
+	border-color: black;
+	border-style: outset;
+	color: #2980b9;
+    display: table-cell;
+	height: 50%;
+	text-align: center;
+    vertical-align: middle;
+	width: 16%;
+}
+	
+#yelpImg{
+	display: inline-block;
+	float: left;
+	margin: 1%;
+}
+
+.titleButton:hover{
+	background-color: black;
+}
+
+.apiBox{
+	margin: 2%;
+}
+
+#computer{
+	display: inline-block;
+	float: left;
+	margin: 3%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#backgrd{
+		background-color: #d3d3d3;
+		display: inline-block;
+		float: left;
+		margin: 2%;
+}
+
+#oauth{
+	display: inline-block;
+	float: left;
+	margin: 2%;
+	width: 45%;
+}
+
+#introBox2{	
+	background-color:#f2e6ff;
+	color: black;
+	display: inline-block;
+	float: right;
+	margin: 2%;
+	padding: 1%;
+	vertical-align: middle;
+	width: 45%;
+}
+
+#introBox2>h2, #introBox2>h3{	
+	color: purple;
+}
+
+.next{
+	color: red;
+	margin: 2%;
+	text-align: right;
+}
+
+footer{
+	margin: 2%;
+}
+
+#request{
+	margin: 2%;
+}
+
+.createImg{
+	border-color: midnightblue;
+	border-style: solid; 
+	height: 400px;
+	margin-left: 25%;
+	text-align: center;
+	width: 50%;
+}
+
+.centered{
+	width: 100%;
+	text-align: center;
+}
+
+#make_calls{
+	text-align: center;
+}
+
+.embedImg{
+	border-color: red;
+	border-style: solid;
+	display: block;
+	margin: auto;
+	margin-top: 1%;
+	width: 100%;
+}
+
+.col1{
+	padding: 2%;
+	text-align: center;
+	width: 16%;
+}
+
+.col2{
+	padding: 2%;
+	width: 30%;
+}
+
+.col3{
+	padding: 2%;
+	width: 52%;
+}
+
+#leftImg{
+	display: inline-block;
+	float: left;
+	margin: 2%;
+	text-align: left;
+	width: 25%;
+}
+
+#unfiltered{
+	background-color:#dee0e8;
+	display: inline-block;
+	float: left;
+	margin-left: 2%;
+	margin-right: 2%;
+	padding: 2%;
+	padding-bottom: 4%;
+	text-align: center;
+	width: 46%;
+}
+
+#unfiltered2{
+	background-color: white;
+	display: inline-block;
+	float: right;
+	margin-right: 2%;
+	padding: 2%;
+	text-align: center;
+	width: 38%;
+}
+
+#console{
+	background-color: #eeeeee;
+	display: inline-block;
+	float: left;
+	margin: 2%;
+	padding-top: 2%;
+	text-align:center;
+	width: 96%;
+}
+
+.embedImg2 {
+	border-color: red;
+	border-style: solid;
+	display: inline-block;
+	float: right;
+	margin-bottom: 2%;
+	width: 96%;
+}
+
+.embedImg3{
+	border-color: red;
+	border-style: solid;
+	display: inline-block;
+	float: right;
+	margin-bottom: 2%;
+	width: 40%;
+}
+
+.embedImg4{
+	border-color: red;
+	border-style: solid;
+	display: inline-block;
+	float: left;
+	margin-bottom: 2%;
+	margin-left: 25%;
+	width: 50%;
+}
+
+
+#fun{
+	margin-left: 3%;
+	margin-top: 5%;
+	display: inline-block;
+	float: right;
+	width: 40%;
+}
+
+#yelpImg2{
+ 	display: block;
+	width: 60%;
+}
+
+#respond_form{
+	background-color: red;
+ 	border-color: black;
+	border-radius: 10%;
+	border-style: solid;	
+	display: inline-block;
+	float: right;
+	font-size: 1.2em;	
+	height: 250px;	
+	margin-bottom: 6%;
+	margin-right: 6%;
+	margin-top: 6%;
+	padding: 2%;
+	width: 40%;
+}
+
+ #results{
+	background-color: #dee0e8;
+	width: 100%;
+ }
+
+.res{
+	display: inline-block;
+	float: left;
+	margin: 2%;
+	text-align: center;
+	width: 20%;
+}

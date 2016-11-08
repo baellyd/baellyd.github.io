@@ -1,0 +1,67 @@
+var http = require('http');
+var express = require('express');
+var express_hb = require('express-handlebars');
+var Yelp = require('yelp');
+var path = require('path');
+var session = require('express-session');
+var request = require('request');
+var body_parser = require('body-parser');
+var app = express();
+app.use(express.static('C:/Users/Diana/Desktop/CS290/Proj'));
+app.listen(8080);
+
+express_hb.create({defaultLayout:'layout'});
+
+
+//https://github.com/olalonde/node-yelp
+//https://expressjs.com/en/starter/static-files.html
+//http://blog.modulus.io/absolute-beginners-guide-to-nodejs
+
+
+function inputParams(){
+	var respond_form = document.getElementById("respond_form");
+	respond_form.innerHTML += "<form onSubmit= 'return inputParams()' method='GET'>";
+	respond_form.innerHTML += "<br/>Business type:     <input id= 'business_type'>";
+	respond_form.innerHTML += "&emsp; City: <input id= 'city'> <br/>State: <input id= 'state'>  &emsp; Zip:  <input id= 'zip'>";
+	respond_form.innerHTML += "<button onclick='submitBtn()' >Submit</button></form>";
+}
+
+function submitBtn(){
+	var respond_form = document.getElementById("respond_form");
+	var busType = document.getElementById("business_type");
+	var city = document.getElementById("city");
+	var state = document.getElementById("state");
+	var zip = document.getElementById("zip");
+
+	respond_form.innerHTML = "Submitted to JavaScript function:<br\>";
+	respond_form.innerHTML = respond_form.innerHTML + busType.value + "<br\>" +  city.value 
+	+ ", " + state.value + " " + zip.value;
+
+	//Send info to yelp
+	var location = city + state + zip;
+	yelpAPI(busType, location);
+}
+
+function yelpAPI(busType, busLocation){
+	var businesses;
+	var yelp = new Yelp({
+		consumer_key: '830ldbmoEOO933pTxaoO0A',
+		consumer_secret: '4xBl8WJ_CvT4ObOsQPXEHJ_cjuM',
+		token: 'pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW',
+		token_secret: 'liKWtBfQtm2L3P49OXA0zQQPofg',
+	});
+	
+/*	yelp.search({term: busType, location: busLocation})
+	.then(function (data) {
+		var jsonString = JSON.stringify(data); // convert data to JSON string
+		jsonObj = JSON.parse(jsonString).businesses; // Parse JSON string to JSON Object
+		for(var prop in jsonObj){
+			console.log(jsonObj[prop].name + ":" + jsonObj[prop].phone + "\n"); // Print each business JSON object
+		}
+
+	})
+	.catch(function (err) {
+		console.error(err);
+	});
+	*/
+} //end of yelpAPI function

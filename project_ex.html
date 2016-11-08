@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CS290 API How-To</title>
+		<link href="style.css" rel="stylesheet" type="text/css">		
+	</head>
+	<body>
+		<div id="titleDiv">
+			<div class="titleButton"><a href = "index.html">Intro</a></div>
+			<div class="titleButton"><a href = "project_key.html">Getting Access</a></div>
+			<div class="titleButton"><a href = "project_req.html">Requests</a></div>
+			<div class="titleButton"><a href = "project_resp.html">Response</a></div>
+			<div class="titleButton"><a href = "project_ex.html">API At Work</a></div>
+		</div>
+	
+		<div id= "fun">
+			<h1>Fun With</h1>
+			<img  id= "yelpImg2" src= "yelp_w.png">
+			<h2>After building the API request piece-by-piece, let's have some fun and do some queries....</h2>
+		</div>	
+			<div id= "respond_form">
+			<form method= "GET">
+				<br/><label class = 'labels'>Business type:     <input class= 'formBox' id= 'business_type'>
+				<br/><br/><label class = 'labels'>City: <input class= 'formBox' id= 'city'> 
+				<br/><br/>State: <input class= 'formBox' id= 'state'>  
+				<br/><br/><label class = 'labels'>Zip:  <input class= 'formBox' id= 'zip'>
+				<br/><input type="button" id='submitBtn' value = "Submit">
+			</form>
+		</div>			
+
+		<div id= "results"></div>
+	</body>
+	<script src="jquery.js"></script>
+	<script src="script_js.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/rmxdave/phnx/master/lib/OAuth/OAuth.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/rmxdave/phnx/master/lib/OAuth/SHA1.js"></script>
+</html>

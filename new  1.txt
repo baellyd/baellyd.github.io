@@ -1,0 +1,321 @@
+	<h2>...So what is an API? </h2>
+		<p>At its most basic, an API (or Application Programming Interface) is a set of tools
+			and data, often provided by a third party, which enables a programmer 
+			to add useful functionality to a program.  APIs work for programmers in a
+			similar conceptual way as GUIs (or Graphical User Interfaces) work for users, by 
+			providing a level of abstraction that limits the need for in-depth knowledge of its 
+			'inner-workings' or underlying code. (<a href= "#fn1">1</a>) 
+		</p>
+		
+		<p>APIs can be used to access data from a provider's data base (such as Wikipedia or NASA), 
+			incorporate map and navigation functionality into a program (such as Google Maps) or publish
+			content to social media (Facebook).  The benefits of using an API may include less coding 
+			required for the same functionality on the developer's part, with more code testing provided 
+			by the third party than the developer may otherwise need to perform, significant improving
+			productivity.(<a href= "#fn1">2</a>) 
+		</p>
+A random, unique "nonce" ID string generated for each request
+				<li>A current time stamp (measured in <a href = "https://en.wikipedia.org/wiki/Unix_time">Epoch time</a> using request data (GET method type, url, search parameters, consumer and token keys) and a timestamp specific to each request
+	<div>
+	<h3>Node.js and npm</h3>
+		<p>Node.js is a JavaScript-based platform used to develop web applications through a command line 
+			interface (outside of the browser environment).  Npm, or <strong>NodeJS Package Manager</strong> 
+			is included when installing Node.js and works with a remote registry of over 280,000 (!) "packages"-
+			shared Javascript code modules provided by a third party.(<a href= "#fn1">6</a>)  "Express" and "Yelp" 
+			npm modules will be used with Node.js in this tutorial to facilitate server creation, request 
+			generation,	communication with Yelp, and response handling.
+		</p>
+
+		<h3>jQuery and Ajax</h3>
+		<p>JQuery is a Javascript library designed to simplify JavaScript operations, especially
+			as applied to HTML/website scripting.  JQuery can be used for 
+			<a href= "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction">
+			DOM element</a> selection, event handling, and to create animations.(<a href= "#fn1">7</a>)  
+			Because jQuery is Javascript, it can be incorporated into traditional Javascript.
+		</p>
+		<p>JQuery is used together with Ajax (a.k.a. "Asynchronous JavaScript and XML") to perform 
+			asynchronous I/O.  The 'XML' in the AJAX acronym refers to one possible format 
+			of data returned from the server, which is more recently becoming replaced by JSON.(<a href= "#fn1">10</a>) 
+		
+
+		</div>
+
+
+//https://gist.github.com/mnemonicflow/1b90ef0d294c692d24458b8378054c81
+
+$(document).ready(function(){
+	$('#submitBtn').click(function(){
+		var respond_form = document.getElementById("respond_form");
+		var busType = document.getElementById("business_type").value;
+		var city = document.getElementById("city").value;
+		var state = document.getElementById("state").value;
+		var zip = document.getElementById("zip").value;
+		var results = document.getElementById("results");
+
+		respond_form.innerHTML = "Submitted to JavaScript function:<br\>";
+		respond_form.innerHTML = respond_form.innerHTML + busType + "<br\>" +  city 
+		+ ", " + state + " " + zip;
+
+		var location = city + state + zip;
+		console.log(location.type);
+	//	yelpAPI(busType, location);
+
+		var cKey = '830ldbmoEOO933pTxaoO0A';
+		var cSecret = '4xBl8WJ_CvT4ObOsQPXEHJ_cjuM';
+		var token = 'pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW';
+        var tSecret = 'liKWtBfQtm2L3P49OXA0zQQPofg';
+
+		var auth = {	
+            consumerKey : cKey,
+			consumerSecret : cSecret,
+			token : token,
+            tokenSecret : tSecret,
+            serviceProvider : {
+                signatureMethod : "HMAC-SHA1"
+            }
+        };
+       
+        var secrets = {
+            consumerSecret : cSecret,
+            tokenSecret : tSecret
+        };
+
+        var query = {
+			term : busType,
+			location : location,
+			oauth_consumer_key : cKey,
+			oauth_consumer_secret : cSecret,
+			oauth_token : token,
+			oauth_signature_method : 'HMAC-SHA1',
+			callback : 'cb'
+		};
+				
+                var message = {
+                    'action' : 'https://api.yelp.com/v2/search',
+                    'method' : 'GET',
+                    'parameters' : query
+                };
+        
+                OAuth.setTimestampAndNonce(message);
+                OAuth.SignatureMethod.sign(message, secrets);
+        
+                var parameterMap = OAuth.getParameterMap(query);
+                    
+                $.ajax({
+                    'url' : 'https://api.yelp.com/v2/search',
+                    'data' : parameterMap,
+                    'dataType' : 'jsonp',
+                    'jsonpCallback' : 'cb',
+                    'cache': true
+                })
+                .done(function(data, textStatus, jqXHR) {
+					var jsonString = JSON.stringify(data); // convert data to JSON string
+					jsonObj = JSON.parse(jsonString).businesses; // Parse JSON string to JSON Object
+					for(var prop in jsonObj){
+						console.log(jsonObj[prop].name + ":" + jsonObj[prop].phone + "\n"); // Print each business JSON object
+					
+						var imgUrl= jsonObj[prop].image_url;
+						results.innerHTML += "<img  id = 'returnImg' src = " + imgUrl + "><br/>";
+					}
+					}
+                )
+
+				
+				//						document.write(jsonObj[prop].name + ":" + jsonObj[prop].phone + "\n"); // Print each business JSON object
+//						document.write(jsonObj[prop].image_url);
+				
+	//			document.write(jsonObj[0].image_url);
+		//		$('#results').append("<img src= 'jsonObj[0].image_url>'");
+		//		$(document.body).append("<img src='data:image/gif;base64," + base64_encode(image_string) + " />");
+	});
+});
+
+		OAuth.setParameter(request, "oauth_consumer_key", "830ldbmoEOO933pTxaoO0A");
+		OAuth.setParameter(request, "oauth_token", "pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW");
+		OAuth.setParameter(request, "oauth_signature_method", 'HMAC-SHA1');
+		OAuth.setParameter(request, "oauth_timestamp", new Date().getTime());
+		OAuth.setParameter(request, "oauth_nonce", nonce);
+		OAuth.setParameter(request, "oauth_version", "1.0");
+	
+		//		OAuth.setTimestampAndNonce(request);		
+		OAuth.SignatureMethod.sign(request, secrets);
+		var baseStr = OAuth.SignatureMethod.getBaseString(request);
+				
+		console.log(baseStr);
+		var key = OAuth.percentEncode(secrets.consumerSecret) + "&" + OAuth.percentEncode(secrets.tokenSecret);
+		var signature = b64_hmac_sha1(key, baseStr);
+        OAuth.setParameter(request, "oauth_signature", signature);
+		
+		//https://gist.github.com/mnemonicflow/1b90ef0d294c692d24458b8378054c81
+
+$(document).ready(function(){
+	document.getElementById("submitBtn").onclick = function(){
+		var respond_form = document.getElementById("respond_form");
+		var busType = document.getElementById("business_type").value;
+		var city = document.getElementById("city").value;
+		var state = document.getElementById("state").value;
+		var zip = document.getElementById("zip").value;
+		var results = document.getElementById("results");
+
+		respond_form.innerHTML = "Submitted to JavaScript function:<br\>";
+		respond_form.innerHTML = respond_form.innerHTML + busType + "<br\>" +  city 
+		+ ", " + state + " " + zip;
+		respond_form.innerHTML = respond_form.innerHTML + '<img id= "done" src = "fusion.png">';
+		var location = city + state + zip;
+		
+		respond_form.style.backgroundColor = '#ffe6e6';
+     
+        var parameters = {
+			term : busType,
+			location : location,
+			oauth_consumer_key : '830ldbmoEOO933pTxaoO0A',
+			oauth_token : 'pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW',
+			callback : 'cb'
+		};
+				
+        var request = {
+			action : 'https://api.yelp.com/v2/search',
+			method : 'GET',
+			parameters : parameters
+        };
+        
+		var secrets = {
+			oauth_signature_method : 'HMAC-SHA1',
+            consumerSecret : '4xBl8WJ_CvT4ObOsQPXEHJ_cjuM',
+            tokenSecret : 'liKWtBfQtm2L3P49OXA0zQQPofg'
+        };
+		
+		var nonce = "";
+		var nonceChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		for (var i = 0; i < 6; ++i){
+			nonce += nonceChars[Math.floor(Math.random() * nonceChars.length)];
+		}
+
+		OAuth.setParameter(request, "oauth_consumer_key", "830ldbmoEOO933pTxaoO0A");
+		OAuth.setParameter(request, "oauth_token", "pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW");
+		OAuth.setParameter(request, "oauth_signature_method", 'HMAC-SHA1');
+		OAuth.setParameter(request, "oauth_timestamp", new Date().getTime());
+		OAuth.setParameter(request, "oauth_nonce", nonce);
+		OAuth.setParameter(request, "oauth_version", "1.0");
+	
+		//		OAuth.setTimestampAndNonce(request);		
+		OAuth.SignatureMethod.sign(request, secrets);
+		var baseStr = OAuth.SignatureMethod.getBaseString(request);
+				
+		console.log(baseStr);
+		var key = OAuth.percentEncode(secrets.consumerSecret) + "&" + OAuth.percentEncode(secrets.tokenSecret);
+		var signature = b64_hmac_sha1(key, baseStr);
+        OAuth.setParameter(request, "oauth_signature", signature);
+		
+//		var oauth = OAuth.getParameterMap(parameters);
+                    
+					
+                $.ajax({
+                    url : request.action,
+                    data : oauth,
+                    dataType : 'jsonp', 
+                    cache : true,
+					error : function() {
+					console.log("Error.  Request not processed.");
+					}
+                }).then(function(data){
+					var jsonString = JSON.stringify(data); // convert data to JSON string
+					jsonObj = JSON.parse(jsonString).businesses; // Parse JSON string to JSON Object
+					for(var prop in jsonObj){
+						console.log(jsonObj[prop].name + ":" + jsonObj[prop].phone + "\n"); // Print each business JSON object
+						var imgUrl= jsonObj[prop].image_url;
+						var busName = jsonObj[prop].name;
+						var phoneNo = jsonObj[prop].phone;
+						var site = jsonObj[prop].url;
+						var rate = jsonObj[prop].rating_img_url_large;
+						results.innerHTML += "<div class= 'res'><img class= 'imgRes' src = " + imgUrl 
+						+ "><br/><img src = " + rate + "><br/><a href = '" + site + "' "
+						+  ">" + busName + "<\a><br/>Phone: " + phoneNo + "<br/></div>" ;	
+					}
+				})
+	};
+});
+
+		
+		var oauth = OAuth.getParameterMap(parameters);
+   
+   //https://gist.github.com/mnemonicflow/1b90ef0d294c692d24458b8378054c81
+
+$(document).ready(function(){
+	document.getElementById("submitBtn").onclick = function(){
+		var respond_form = document.getElementById("respond_form");
+		var busType = document.getElementById("business_type").value;
+		var city = document.getElementById("city").value;
+		var state = document.getElementById("state").value;
+		var zip = document.getElementById("zip").value;
+		var results = document.getElementById("results");
+
+		respond_form.innerHTML = "Submitted to JavaScript function:<br\>";
+		respond_form.innerHTML = respond_form.innerHTML + busType + "<br\>" +  city 
+		+ ", " + state + " " + zip;
+		respond_form.innerHTML = respond_form.innerHTML + '<img id= "done" src = "fusion.png">';
+		var location = city + state + zip;
+		
+		respond_form.style.backgroundColor = '#ffe6e6';
+     
+        var parameters = {
+			term : busType,
+			location : location,
+			oauth_consumer_key : '830ldbmoEOO933pTxaoO0A',
+			oauth_token : 'pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW',
+			callback : 'cb'
+		};
+				
+        var request = {
+			action : 'https://api.yelp.com/v2/search',
+			method : 'GET',
+			parameters : parameters
+        };
+        
+		var secrets = {
+			oauth_signature_method : 'HMAC-SHA1',
+            consumerSecret : '4xBl8WJ_CvT4ObOsQPXEHJ_cjuM',
+            tokenSecret : 'liKWtBfQtm2L3P49OXA0zQQPofg'
+        };
+		
+		var nonce = "";
+		var nonceChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		for (var i = 0; i < 6; ++i){
+			nonce += nonceChars[Math.floor(Math.random() * nonceChars.length)];
+		}
+
+		OAuth.setParameter(request, "oauth_timestamp", new Date().getTime());
+		OAuth.setParameter(request, "oauth_nonce", nonce);
+//		OAuth.setTimestampAndNonce(request);  
+
+
+		OAuth.SignatureMethod.sign(request, secrets);
+        
+		var oauth = OAuth.getParameterMap(parameters);
+                    
+					
+                $.ajax({
+                    url : request.action,
+                    data : oauth,
+                    dataType : 'jsonp', 
+                    cache : true,
+					error : function() {
+					console.log("Error.  Request not processed.");
+					}
+                }).then(function(data){
+					var jsonString = JSON.stringify(data); // convert data to JSON string
+					jsonObj = JSON.parse(jsonString).businesses; // Parse JSON string to JSON Object
+					for(var prop in jsonObj){
+						console.log(jsonObj[prop].name + ":" + jsonObj[prop].phone + "\n"); // Print each business JSON object
+						var imgUrl= jsonObj[prop].image_url;
+						var busName = jsonObj[prop].name;
+						var phoneNo = jsonObj[prop].phone;
+						var site = jsonObj[prop].url;
+						var rate = jsonObj[prop].rating_img_url_large;
+						results.innerHTML += "<div class= 'res'><img class= 'imgRes' src = " + imgUrl 
+						+ "><br/><img src = " + rate + "><br/><a href = '" + site + "' "
+						+  ">" + busName + "<\a><br/>Phone: " + phoneNo + "<br/></div>" ;	
+					}
+				})
+	};
+});

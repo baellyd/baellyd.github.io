@@ -1,0 +1,89 @@
+//https://gist.github.com/mnemonicflow/1b90ef0d294c692d24458b8378054c81
+
+$(document).ready(function(){
+	document.getElementById("submitBtn").onclick = function(){
+		var respond_form = document.getElementById("respond_form");
+		var busType = document.getElementById("business_type").value;
+		var city = document.getElementById("city").value;
+		var state = document.getElementById("state").value;
+		var zip = document.getElementById("zip").value;
+		var results = document.getElementById("results");
+
+		respond_form.innerHTML = "Submitted to JavaScript function:<br\>";
+		respond_form.innerHTML = respond_form.innerHTML + busType + "<br\>" +  city 
+		+ ", " + state + " " + zip;
+		respond_form.innerHTML = respond_form.innerHTML + '<img id= "done" src = "fusion.png">';
+		var location = city + state + zip;
+		
+		respond_form.style.backgroundColor = '#ffe6e6';
+     
+        var parameters = {
+			term : busType,
+			location : location,
+			oauth_consumer_key : '830ldbmoEOO933pTxaoO0A',
+			oauth_token : 'pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW',
+			callback : 'cb'
+		};
+				
+        var request = {
+			action : 'https://api.yelp.com/v2/search',
+			method : 'GET',
+			parameters : parameters
+        };
+        
+		var secrets = {
+			oauth_signature_method : 'HMAC-SHA1',
+            consumerSecret : '4xBl8WJ_CvT4ObOsQPXEHJ_cjuM',
+            tokenSecret : 'liKWtBfQtm2L3P49OXA0zQQPofg'
+        };
+		
+		var nonce = "";
+		var nonceChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+		for (var i = 0; i < 6; ++i){
+			nonce += nonceChars[Math.floor(Math.random() * nonceChars.length)];
+		}
+
+		OAuth.setParameter(request, "oauth_consumer_key", "830ldbmoEOO933pTxaoO0A");
+		OAuth.setParameter(request, "oauth_token", "pXFLdNfi28Tfq41zeHP4GlvJiCp42zOW");
+		OAuth.setParameter(request, "oauth_signature_method", 'HMAC-SHA1');
+		OAuth.setParameter(request, "oauth_timestamp", new Date().getTime());
+		OAuth.setParameter(request, "oauth_nonce", nonce);
+		OAuth.setParameter(request, "oauth_version", "1.0");
+	
+		//		OAuth.setTimestampAndNonce(request);		
+		OAuth.SignatureMethod.sign(request, secrets);
+		var baseStr = OAuth.SignatureMethod.getBaseString(request);
+				
+		console.log(baseStr);
+		var key = OAuth.percentEncode(secrets.consumerSecret) + "&" + OAuth.percentEncode(secrets.tokenSecret);
+		var signature = b64_hmac_sha1(key, baseStr);
+        OAuth.setParameter(request, "oauth_signature", signature);
+		
+		var oauth = OAuth.getParameterMap(parameters);
+                    
+					
+                $.ajax({
+                    url : request.action,
+                    data : oauth,
+                    dataType : 'jsonp', 
+                    cache : true,
+					error : function() {
+					console.log("Error.  Request not processed.");
+					}
+                }).then(function(data){
+					var jsonString = JSON.stringify(data); // convert data to JSON string
+					jsonObj = JSON.parse(jsonString).businesses; // Parse JSON string to JSON Object
+					for(var prop in jsonObj){
+						console.log(jsonObj[prop].name + ":" + jsonObj[prop].phone + "\n"); // Print each business JSON object
+						var imgUrl= jsonObj[prop].image_url;
+						var busName = jsonObj[prop].name;
+						var phoneNo = jsonObj[prop].phone;
+						var site = jsonObj[prop].url;
+						var rate = jsonObj[prop].rating_img_url_large;
+						results.innerHTML += "<div class= 'res'><img class= 'imgRes' src = " + imgUrl 
+						+ "><br/><img src = " + rate + "><br/><a href = '" + site + "' "
+						+  ">" + busName + "<\a><br/>Phone: " + phoneNo + "<br/></div>" ;	
+					}
+				})
+	};
+});
