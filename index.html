@@ -4,93 +4,97 @@
     <meta charset="utf-8">
     <title>CS290 API How-To</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
-	<script src="script.js"></script>
   </head>
   
   <body>
-	<div id="titleDiv">
-		<div id= "tb1" class="titleButton"><a href = "project_main.html">Intro</a></div>
-		<div id= "tb2" class="titleButton"><a href = "project_key.html">Getting Access</a></div>
-		<div id= "tb3" class="titleButton"><a href = "project_req.html">Requests and Response</a></div>
-		<div id= "tb4" class="titleButton"><a href = "project_resp.html">Making Sense of Data</a></div>
-		<div id= "tb5" class="titleButton"><a href = "project_ex.html">API At Work</a></div>
-	</div>
+		<div id="titleDiv">
+			<div class="titleButton"><a href = "index.html">Intro</a></div>
+			<div class="titleButton"><a href = "project_key.html">Getting Access</a></div>
+			<div class="titleButton"><a href = "project_req.html">Requests</a></div>
+			<div class="titleButton"><a href = "project_resp.html">Response</a></div>
+			<div class="titleButton"><a href = "project_ex.html">API At Work</a></div>
+		</div>
+	
 	<div>
-		<img  id = "yelpImg" src = "logo-2-color.png">
+		<img  id= "yelpImg" src= "logo-2-color.png">
 		<h1>Introduction to the Yelp Fusion API.  How to 'Yelp' From Your Own Page!</h1>
 	</div>
-	<div id= "demoBox"></div>
-	<div id= "introBox"><br/><h2>...So what is an API? </h2><br/>
-		<p>At its most basic, an API (or Application Programming Interface) is a set of tools
-			and data, often provided by a third party, which enables the programmer 
-			to add useful functionality when developing a program.  APIs work for programmers in a
-			similar conceptual way as GUIs (or Graphical User Interfaces) work for users, by 
-			providing a level of abstraction that limits the need for in-depth knowledge of its 
-			'inner-workings' or underlying code. (1) 
+	
+	<h2>The Yelp Fusion API</h2>
+	
+	<div class= "apiBox">
+		<img id= "computer" src = "fusion.png">
+		<p>Although described as an "API", Yelp Fusion is actually a set of APIs that developers can use to add Yelp functionality to their applications.  Under Yelp Fusion v2, APIs are	available to perform the following:  </p>
+		<ul>
+			<li> Find businesses by keyword search and location
+			<li> Look up information for a given business (ex: hours of operation, reviews, and photos).
+			<li> Search for business by phone.
+		</ul>
+		
+		<p>Under the recently introduced Yelp Fusion v3, new functionality 	has also been added	to search by a specific transaction (ex: food delivery), return reviews for a business,	and provide autocomplete suggestions based on input text.(<a href= "#fn1">1</a>)  
 		</p>
 		
-		<p>APIs can be used to access data from a provider's data base (such as Wikipedia or NASA), 
-		incorporate map and navigation functionality into a program (such as Google Maps) or publish
-		content to social media (Facebook).  The benefits of using an API may include less coding 
-		required for the same functionality on the developer's part, with more code testing provided 
-		by the third part than the developer may otherwise be able to perform, thereby providing a 
-		significant increase in productivity.  (2) 
+		<p>In this How-To, we will focus on Yelp Fusion v2 due to its additional complexity; in contrast with Yelp Fusion v3, it uses 4 different identifiers (consumer ID, consumer secret, token ID, token secret) to generate a secure authorization signature needed for request submission.  Additionally, this How-To will seek to fill in some of the "gaps" between obtaining user credentials and generating the request in Javascript.  Although the Yelp Fusion API website and its GitHub sample site <a href = "https://www.yelp.com/developers/documentation/v2/examples">
+		here</a> provide some examples of different languages used to code the API request, such as Python, Android, PHP and Ruby,  detailed information on how to format and submit Javascript-coded requests to the API is not presented. 
 		</p>
-	</div>
-	<div id="apiBox">
-		<h2>The Yelp Fusion API</h2>
-		<p>The Yelp Fusion API allows developers to add functionality for finding and reviewing businesses.  
-		The API is broken into two individual APIs- one for searching available businesses in Yelp (using GPS
-		functionality), and another for examining details for a given business (ex: hours of operation, reviews, and 
-		photos).</p>
-
-		<p>The API functions by using standard, secure authorization protocols 
-			<a class = "links" href= "https://en.wikipedia.org/wiki/OAuth">OAuth</a> and  
-			<a class = "links" href= "https://www.x.org/archive/X11R6.8.1/doc/xauth.1.html">xAuth</a>
-		to authenticate requests.  OAuth is used for Yelp login; xAuth provides a way 
-		for username/password exchange [to obtain an OAuth access token].  There are currently 2 versions of the 
-		Yelp Fusion API being used- versions 2 and 3.  <a href = "https://github.com/Yelp/yelp-fusion">Version 3 has been 
-		recently introduced</a> to supplement existing v2 functionality.  Changes between the two versions include an upgraded version of OAuth; Yelp v2 uses OAuth 
-		v1a, and Yelp v3 uses OAuth v2.  Yelp v3 also includes autocomplete functionality and a search endpoint for 
-		food delivery from businesses.</p>
-		<p>In this review, we will focus on Yelp v2 as it has been around much longer, has been more extensively 
-		utilized (and therefore tested), and has a greater amount of associated documentation than Yelp v3.
+		
+		<p>Below is some background information that will be needed to generate the request code.
 		</p>
-
-		<p>To access the API, it's necessary to go through the following series of steps, as described in detail
-		at the links above: 
-			<ol>
-				<LI>Install the necessary Node.js packages using npm 
-				<li>Get authentication credentials: Request an API Key, Secret, and Token from Yelp by creating an "App". 
-				There are 2 versions of the API, v2 and v3, which vary slightly in how credentials are obtained.
-				<li>Make an API Request: Use Key, Secret, Token and Token Secret to authenticate API calls when requesting 
-				information from Yelp
-				<li>API Response: Parse and process the returned data
-			</ol>
 	</div>
 	
-	<div id= "introBox2"><h2>What is Node.js and npm?</h2>
-		<p>Node.js is a JavaScript-based platform used to develop web applications outside of the 
-			browser (1).  It allows for <strong>Asynchronous Input/Output (I/O)</strong>, whereby program/
-			script processing can run concurrently with input and output operations.  Traditionally, 
-			I/O has been <strong>Synchronous</strong>:  I/O would halt executing script or program processes, 
-			pending its completion.  Because I/O can be a very slow process (possibly seeking
-			or writing data to a mechanical system), Synchronous I/O can significantly impact program performance.
-			(2)</p>
-
-			<p>npm, or <strong>NodeJS Package Manager</strong> is included when installing Node.js.  It is used 
-			on the command line and works with a remote registry to install a variety (over 280,000!) of "packages" 
-			or shared Javascript code modules provided by a third party(3).  
+	<div id= "backgrd">
+		<div id= "oauth">
+			<h2>Oauth and Security</h2>
+			<p> The Yelp Fusion API uses standard, secure authorization protocol 
+				<a class = "links" href= "https://en.wikipedia.org/wiki/OAuth">OAuth</a> to authenticate requests. OAuth provides a way for users to securely access third party applications from a server without sharing password information.  "Tokens" are granted to users to provide access.  Authentication data includes a user ("consumer") key and password ("secret"), a token ID, and (depending on the API and OAuth version being used) a token secret.
+			</p>
+			
+			</p>
+			<p>The Oauth v1.0a signature must be included as part of the API call, and is generated via an <a href= "https://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC-SHA1</a> hash algorithm, which takes as input the following information: 
+			</p>
+			<ul>
+			<li>Request parameters including: 'GET' request method, request URL, search term and location, the consumer key and token, and the callback name to be used for returned information.
+			<li>The consumer and token secrets.
+			</ul>
+			
+			<p> Yelp Fusion v2 uses Oauth v1.0a, whereas Yelp Fusion v3 uses its successor Oauth v2.0.  
+				Oauth v2.0 improves on Oauth v1.0 in the following: 
+				<ul>
+					<li>Support for non-browser applications, such as mobile phones.  
+					<li>Simplified security signature- no complex hashing.
+					<li>Access tokens which expire.
+					<li>Better separation between server authorization and request handling.(<a href= "#fn2">2</a>)
+				</ul>
+		</div>
+		
+		<div id= "introBox2">
+			<h2>Coding Requests</h2>
+			<p>For Yelp Fusion v2, a request is created and submitted which combines security information and request data.  We will later look at a working example of the Yelp Search API which takes a term and location as query parameters in the request.  
+			</p>
+			<p>In this tutorial, we will look at two Javascript-based code implementations of request generation: </p>
+				<ul>
+					<li>On the command line, using Node.js and npm modules to facilitate security signature generation and request submission through the creation of a "Yelp Object". 
+					<li>In the browser, using Javascript/Jquery/Ajax to create encoded OAuth signatures via hashing, used to formulate and make the API calls. 
+				</ul>	
+			<p>	As both types are Javascript-based, the code requests are similar. Both use <a href= "https://msdn.microsoft.com/en-us/library/bb299886.aspx"> JSON (Javascript Object Notation)</a>, and make use of asynchronous <strong>Asynchronous Input/Output (I/O)</strong> for request handling.  With asynchronous I/O, program/script processing can run concurrently with input and output operations.  Traditionally, I/O has been <strong>Synchronous</strong>:  I/O would halt executing script or program processes, pending its completion.  Because I/O can be a very slow process (possibly seeking or writing data to a mechanical system), Synchronous I/O can significantly impact program performance.(<a href= "#fn3">3</a>) Both requests will also be GET requests, per Yelp specification.
+			</p>
+		</div>
+	</div>
+	
+	<div class= "next">
+		<a href = "project_key.html"><h1>Next, let's look at getting access to the API...</h1></a>
 	</div>
 
-	</body>
-	<footer>
+		<footer>
 		<p>References: <br/>
-			1.<a class = "foot" href= "https://en.wikipedia.org/wiki/Application_programming_interface#cite_note-Clarke4-1">
-			https://en.wikipedia.org/wiki/Application_programming_interface#cite_note-Clarke4-1</a><br/>
-			2.<a class = "foot" href= "http://www.programmableweb.com/news/how-web-and-browser-apis-fuel-api-economy/analysis/2015/12/03">
-			http://www.programmableweb.com/news/how-web-and-browser-apis-fuel-api-economy/analysis/2015/12/03</a><br/>
-			</p>
-</footer>
-
-	</html>
+			<ol>
+				<li id= "fn1" ><a class = "foot" href= "https://www.yelp.com/developers/documentation/v3">
+				https://www.yelp.com/developers/documentation/v3</a><br/>
+				<li id= "fn2" ><a class = "foot" href= "https://hueniverse.com/2010/05/15/introducing-oauth-2-0/">
+				https://hueniverse.com/2010/05/15/introducing-oauth-2-0/</a><br/>	
+				<li id= "fn3" ><a class = "foot" href= "https://en.wikipedia.org/wiki/Asynchronous_I/O">
+				https://en.wikipedia.org/wiki/Asynchronous_I/O</a><br/>
+			</ol>
+	</footer>
+	</body>
+</html>
